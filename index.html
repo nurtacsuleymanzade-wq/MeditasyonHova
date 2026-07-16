@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nalan Nur — Çakra Meditasyon</title>
+    <meta name="description" content="Sorununa özel, kişiye özel meditasyon. Çakralar, enerji, görselleştirme ve bilinçaltı çalışmaları.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #0a0a12;
+            --bg-secondary: #12121e;
+            --bg-card: #1a1a2e;
+            --text-primary: #f0ece4;
+            --text-secondary: #a8a0a0;
+            --accent-1: #c084fc;      /* mor - taç çakra */
+            --accent-2: #818cf8;      /* indigo - alın çakra */
+            --accent-3: #38bdf8;      /* mavi - boğaz çakra */
+            --accent-4: #34d399;      /* yeşil - kalp çakra */
+            --accent-5: #fbbf24;      /* sarı - solar pleksus */
+            --accent-6: #fb923c;      /* turuncu - sakral */
+            --accent-7: #ef4444;      /* kırmızı - kök çakra */
+            --gradient-main: linear-gradient(135deg, #0a0a12 0%, #1a1a2e 50%, #0a0a12 100%);
+            --gradient-chakra: linear-gradient(135deg, #ef4444, #fb923c, #fbbf24, #34d399, #38bdf8, #818cf8, #c084fc);
+            --shadow-glow: 0 0 40px rgba(192, 132, 252, 0.15);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ─── ANİMASYONLAR ─── */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes chakra-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* ─── ARKA PLAN ─── */
+        .bg-orbs {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float 8s ease-in-out infinite;
+        }
+        .bg-orb:nth-child(1) {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(192,132,252,0.12), transparent);
+            top: -200px; right: -200px;
+            animation-delay: 0s;
+        }
+        .bg-orb:nth-child(2) {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(56,189,248,0.08), transparent);
+            bottom: -150px; left: -150px;
+            animation-delay: -4s;
+        }
+        .bg-orb:nth-child(3) {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(251,191,36,0.06), transparent);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -2s;
+        }
+
+        /* ─── NAVBAR ─── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10,10,18,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: var(--gradient-chakra);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradient-shift 4s ease infinite;
+        }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-cta {
+            background: var(--gradient-chakra);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-size: 200% auto;
+            animation: gradient-shift 4s ease infinite;
+        }
+        .nav-cta:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(192,132,252,0.3); }
+        .mobile-menu-btn { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+        /* ─── HERO ─── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 40px 80px;
+        }
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(192,132,252,0.15);
+            border: 1px solid rgba(192,132,252,0.3);
+            color: var(--accent-1);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+        .hero h1 span {
+            background: var(--gradient-chakra);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradient-shift 4s ease infinite;
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            background: var(--gradient-chakra);
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-size: 200% auto;
+            animation: gradient-shift 4s ease infinite;
+            text-decoration: none;
+        }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(192,132,252,0.3); }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-secondary:hover { border-color: var(--accent-1); color: var(--accent-1); }
+
+        /* ─── ÇAKRA GÖSTERGESİ ─── */
+        .chakra-wheel {
+            width: 120px; height: 120px;
+            margin: 0 auto 40px;
+            position: relative;
+            animation: chakra-rotate 20s linear infinite;
+        }
+        .chakra-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .chakra-ring:nth-child(1) { border-color: var(--accent-7); inset: 0px; }
+        .chakra-ring:nth-child(2) { border-color: var(--accent-6); inset: 12px; animation-delay: 0.5s; }
+        .chakra-ring:nth-child(3) { border-color: var(--accent-5); inset: 24px; animation-delay: 1s; }
+        .chakra-ring:nth-child(4) { border-color: var(--accent-4); inset: 36px; animation-delay: 1.5s; }
+        .chakra-ring:nth-child(5) { border-color: var(--accent-3); inset: 48px; animation-delay: 2s; }
+        .chakra-ring:nth-child(6) { border-color: var(--accent-2); inset: 56px; animation-delay: 2.5s; }
+        .chakra-center {
+            position: absolute;
+            inset: 52px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-1), transparent);
+            opacity: 0.6;
+        }
+
+        /* ─── SORUN YAZMA FORMU ─── */
+        .form-section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 40px;
+            background: var(--bg-secondary);
+        }
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .form-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .form-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 48px;
+        }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .problem-tag {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 16px 20px;
+            border-radius: 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        .problem-tag:hover { border-color: var(--accent-1); transform: translateY(-2px); }
+        .problem-tag.selected {
+            border-color: var(--accent-1);
+            background: rgba(192,132,252,0.15);
+            box-shadow: 0 0 20px rgba(192,132,252,0.15);
+        }
+        .problem-tag .emoji { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+
+        textarea {
+            width: 100%;
+            padding: 20px 24px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+        textarea:focus { outline: none; border-color: var(--accent-1); }
+
+        .form-submit {
+            width: 100%;
+            padding: 18px;
+            background: var(--gradient-chakra);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-size: 200% auto;
+            animation: gradient-shift 4s ease infinite;
+        }
+        .form-submit:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(192,132,252,0.3); }
+        .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ─── SONUÇ ─── */
+        .result-section {
+            position: relative;
+            z-index: 1;
+            padding: 80px 40px;
+            display: none;
+        }
+        .result-section.visible { display: block; }
+        .result-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 48px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: var(--shadow-glow);
+        }
+        .result-chakra {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .result-container h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .result-problem {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+        .result-recommendation {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .result-recommendation h4 {
+            color: var(--accent-1);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .result-recommendation p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .result-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .result-detail-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        .result-detail-card .label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        .result-detail-card .value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .result-actions .btn-primary { flex: 1; text-align: center; }
+
+        /* ─── ÇAKRA AÇIKLAMALARI ─── */
+        .chakra-section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 40px;
+        }
+        .chakra-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .chakra-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .chakra-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s;
+            cursor: default;
+        }
+        .chakra-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); }
+        .chakra-dot {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+        }
+        .chakra-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        .chakra-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 60px 40px 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        .footer-social { display: flex; gap: 20px; justify-content: center; margin-bottom: 24px; }
+        .footer-social a {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .footer-social a:hover {
+            border-color: var(--accent-1);
+            color: var(--accent-1);
+            transform: translateY(-3px);
+        }
+        footer p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero { padding: 100px 20px 60px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .form-section { padding: 60px 20px; }
+            .result-section { padding: 40px 20px; }
+            .result-container { padding: 24px; }
+            .result-details { grid-template-columns: 1fr; }
+            .chakra-section { padding: 60px 20px; }
+            .chakra-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+</div>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+    <div class="nav-logo">✦ Nalan Nur</div>
+    <div class="nav-links">
+        <a href="#form">Meditasyon Oluştur</a>
+        <a href="#chakras">Çakralar</a>
+        <a href="https://www.instagram.com/ben_nalan_nurr" target="_blank">Instagram</a>
+        <a href="#form" class="nav-cta">Başla</a>
+    </div>
+    <button class="mobile-menu-btn">☰</button>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="chakra-wheel">
+            <div class="chakra-ring"></div>
+            <div class="chakra-ring"></div>
+            <div class="chakra-ring"></div>
+            <div class="chakra-ring"></div>
+            <div class="chakra-ring"></div>
+            <div class="chakra-ring"></div>
+            <div class="chakra-center"></div>
+        </div>
+        <div class="hero-badge">✨ 7 Çakra Enerji Çalışması</div>
+        <h1>Sorununa Özel<br><span>Meditasyonunu Bul</span></h1>
+        <p>
+            Her sorun bir çakrada saklıdır. Paran mı lazım? Birini unutamıyor musun?
+            Uyuyamıyor musun? Sorununu yaz, sana özel meditasyon sesi + görselleştirme
+            hazırlayalım.
+        </p>
+        <div class="hero-buttons">
+            <a href="#form" class="btn-primary">Meditasyonumu Oluştur</a>
+            <a href="#chakras" class="btn-secondary">Çakraları Keşfet</a>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FORM ─── -->
+<section class="form-section" id="form">
+    <div class="form-container">
+        <h2>🌙 Sorununu Paylaş</h2>
+        <p class="form-subtitle">Hangi konuda destek arıyorsun? Sana özel bir meditasyon hazırlayalım.</p>
+
+        <div class="problem-grid" id="problemGrid">
+            <div class="problem-tag" data-problem="para" data-chakra="solar">
+                <span class="emoji">💰</span>
+                Para & Bolluk
+            </div>
+            <div class="problem-tag" data-problem="unutmak" data-chakra="kalp">
+                <span class="emoji">💔</span>
+                Birini Unutmak
+            </div>
+            <div class="problem-tag" data-problem="uyku" data-chakra="alin">
+                <span class="emoji">😴</span>
+                Uyuyamıyorum
+            </div>
+            <div class="problem-tag" data-problem="odak" data-chakra="alin">
+                <span class="emoji">🎯</span>
+                Odaklanamıyorum
+            </div>
+            <div class="problem-tag" data-problem="kaygi" data-chakra="kok">
+                <span class="emoji">🌊</span>
+                Kaygı & Stres
+            </div>
+            <div class="problem-tag" data-problem="enerji" data-chakra="sakral">
+                <span class="emoji">🔥</span>
+                Enerjim Yok
+            </div>
+            <div class="problem-tag" data-problem="iletisim" data-chakra="bogaz">
+                <span class="emoji">🗣️</span>
+                Kendimi İfade Edemiyorum
+            </div>
+            <div class="problem-tag" data-problem="ruh" data-chakra="tac">
+                <span class="emoji">🌌</span>
+                Ruhsal Sıkışmışlık
+            </div>
+            <div class="problem-tag" data-problem="kendine-guven" data-chakra="solar">
+                <span class="emoji">🦋</span>
+                Özgüven Eksikliği
+            </div>
+        </div>
+
+        <textarea id="problemInput" placeholder="Sorununu detaylıca yaz... Örn: 'Uzun süredir maddi anlamda rahatlamak istiyorum, sürekli para yetmiyor ve bu beni kaygılandırıyor.'"></textarea>
+
+        <button class="form-submit" id="submitBtn" disabled>Meditasyonumu Hazırla ✨</button>
+    </div>
+</section>
+
+<!-- ─── SONUÇ ─── -->
+<section class="result-section" id="resultSection">
+    <div class="result-container">
+        <div class="result-chakra" id="resultChakraDot" style="background: var(--accent-5);"></div>
+        <h3 id="resultTitle">🌸 Meditasyonun Hazır</h3>
+        <p class="result-problem" id="resultProblem">"..."</p>
+
+        <div class="result-recommendation">
+            <h4 id="resultChakraName">🌀 Solar Pleksus Çakrası</h4>
+            <p id="resultDescription">
+                Bu sorun Solar Pleksus çakranla bağlantılı. Özgüven, irade ve bolluk enerjisinin
+                merkezi. Aşağıdaki meditasyonu 21 gün boyunca uygulamanı öneriyorum.
+            </p>
+        </div>
+
+        <div class="result-details">
+            <div class="result-detail-card">
+                <div class="label">🎵 Meditasyon Süresi</div>
+                <div class="value" id="resultDuration">11:00 dk</div>
+            </div>
+            <div class="result-detail-card">
+                <div class="label">🔮 Çakra Rengi</div>
+                <div class="value" id="resultColor">Sarı (#fbbf24)</div>
+            </div>
+            <div class="result-detail-card">
+                <div class="label">📿 Günde Kaç Kere</div>
+                <div class="value">2 kere (sabah + akşam)</div>
+            </div>
+            <div class="result-detail-card">
+                <div class="label">🗓️ Önerilen Süre</div>
+                <div class="value">21 gün</div>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <a href="#" class="btn-primary" id="shareBtn" onclick="shareResult()">📱 Paylaş</a>
+            <a href="#form" class="btn-secondary">Yeni Meditasyon</a>
+        </div>
+    </div>
+</section>
+
+<!-- ─── ÇAKRALAR ─── -->
+<section class="chakra-section" id="chakras">
+    <h2>🌸 Yedi Çakra Sistemi</h2>
+    <div class="chakra-grid">
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-7);"></div>
+            <h3>Kök Çakra 🌍</h3>
+            <p>Güven, hayatta kalma, aidiyet. Kaygı ve güvensizlik hissettiğinde bu çakra çalışır.</p>
+        </div>
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-6);"></div>
+            <h3>Sakral Çakra 💧</h3>
+            <p>Yaratıcılık, tutku, duygular. Enerjin düştüğünde veya yaratıcı blokajda bu çakrayı aç.</p>
+        </div>
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-5);"></div>
+            <h3>Solar Pleksus 🔥</h3>
+            <p>Özgüven, irade, bolluk. Para ve özgüven sorunlarında bu çakra devreye girer.</p>
+        </div>
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-4);"></div>
+            <h3>Kalp Çakrası 💚</h3>
+            <p>Sevgi, şefkat, affetme. Birini unutmak veya kalp kırıklığında bu çakrayı çalıştır.</p>
+        </div>
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-3);"></div>
+            <h3>Boğaz Çakrası 💙</h3>
+            <p>İfade, iletişim, hakikat. Kendini ifade edemiyorsan bu çakran tıkalı olabilir.</p>
+        </div>
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-2);"></div>
+            <h3>Alın Çakrası 👁️</h3>
+            <p>Sezgi, odak, içgörü. Uyku sorunları ve odaklanma problemlerinde bu çakra çalışır.</p>
+        </div>
+        <div class="chakra-card">
+            <div class="chakra-dot" style="background: var(--accent-1);"></div>
+            <h3>Taç Çakrası ✨</h3>
+            <p>Ruhsal bağlantı, bilinç, huzur. Ruhsal sıkışmışlık ve anlam arayışında bu çakra açılır.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+    <div class="footer-social">
+        <a href="https://www.instagram.com/ben_nalan_nurr" target="_blank" title="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        </a>
+        <a href="#" title="YouTube">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/><rect x="2" y="3" width="20" height="18" rx="3"/></svg>
+        </a>
+        <a href="#" title="TikTok">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        </a>
+    </div>
+    <p>© 2026 Nalan Nur — Çakra Meditasyon. Tüm hakları saklıdır.</p>
+    <p style="margin-top: 8px; font-size: 0.8rem;">🌙 Her sorun bir çakrada saklıdır.</p>
+</footer>
+
+<script>
+    // ─── PROBLEM SEÇİMİ ───
+    const problemTags = document.querySelectorAll('.problem-tag');
+    const problemInput = document.getElementById('problemInput');
+    const submitBtn = document.getElementById('submitBtn');
+    let selectedProblem = null;
+
+    const problemDetails = {
+        para: {
+            chakra: 'solar',
+            chakraName: '🌀 Solar Pleksus Çakrası',
+            color: 'var(--accent-5)',
+            colorName: 'Sarı',
+            duration: '13:00 dk',
+            title: '💰 Bolluk ve Bereket Meditasyonu',
+            description: 'Solar Pleksus çakran bolluk ve bereket enerjisinin merkezidir. Bu meditasyon, para akışını engelleyen blokajları çözer, bolluk bilincini aktive eder ve evrenin sana sunduğu fırsatları görmeni sağlar. 21 gün boyunca günde 2 kere uygulaman önerilir.'
+        },
+        unutmak: {
+            chakra: 'kalp',
+            chakraName: '💚 Kalp Çakrası',
+            color: 'var(--accent-4)',
+            colorName: 'Yeşil',
+            duration: '15:00 dk',
+            title: '💔 Bağ Koparma ve Şifa Meditasyonu',
+            description: 'Kalp çakrası sevgi, şefkat ve affetmenin merkezidir. Bu meditasyon, geçmiş bağları şefkatle bırakmana, kalbindeki yaraları sarmana ve kendine olan sevgini yeniden inşa etmene yardımcı olur. Her gözyaşı bir şifadır.'
+        },
+        uyku: {
+            chakra: 'alin',
+            chakraName: '👁️ Alın Çakrası',
+            color: 'var(--accent-2)',
+            colorName: 'İndigo',
+            duration: '20:00 dk',
+            title: '😴 Derin Uyku Meditasyonu',
+            description: 'Alın çakrası (üçüncü göz) zihinsel yorgunluk ve aşırı düşünme ile bloke olur. Bu meditasyon, zihni sakinleştirir, kortizol seviyesini düşürür ve derin, onarıcı bir uykuya geçmeni sağlar. Yatmadan hemen önce dinle.'
+        },
+        odak: {
+            chakra: 'alin',
+            chakraName: '👁️ Alın Çakrası',
+            color: 'var(--accent-2)',
+            colorName: 'İndigo',
+            duration: '11:00 dk',
+            title: '🎯 Odaklanma Meditasyonu',
+            description: 'Üçüncü göz çakrası odaklanma ve sezgi gücünü yönetir. Bu meditasyon, dikkat dağınıklığını giderir, zihni tek bir noktaya odaklar ve üretkenliğini artırır.'
+        },
+        kaygi: {
+            chakra: 'kok',
+            chakraName: '🌍 Kök Çakrası',
+            color: 'var(--accent-7)',
+            colorName: 'Kırmızı',
+            duration: '15:00 dk',
+            title: '🌊 Kaygı ve Stres Meditasyonu',
+            description: 'Kök çakra güven ve istikrar merkezidir. Kaygı hissettiğinde bu çakra dengesizleşir. Bu meditasyon, topraklanmanı sağlar, güvende hissetmene yardımcı olur ve stresi bedeninden atar.'
+        },
+        enerji: {
+            chakra: 'sakral',
+            chakraName: '💧 Sakral Çakrası',
+            color: 'var(--accent-6)',
+            colorName: 'Turuncu',
+            duration: '12:00 dk',
+            title: '🔥 Enerji Yükseltme Meditasyonu',
+            description: 'Sakral çakra yaşam enerjisi ve yaratıcılığın merkezidir. Enerjin düştüğünde bu çakra tıkanır. Bu meditasyon, enerji akışını yeniden başlatır, canlılığını ve tutkunu geri getirir.'
+        },
+        iletisim: {
+            chakra: 'bogaz',
+            chakraName: '💙 Boğaz Çakrası',
+            color: 'var(--accent-3)',
+            colorName: 'Mavi',
+            duration: '14:00 dk',
+            title: '🗣️ İfade Özgürlüğü Meditasyonu',
+            description: 'Boğaz çakrası kendini ifade etme ve hakikat merkezidir. Duygularını ifade edemiyorsan bu çakran tıkalı olabilir. Bu meditasyon, sesini bulmana ve kalbinden geleni cesurca söylemene yardımcı olur.'
+        },
+        ruh: {
+            chakra: 'tac',
+            chakraName: '✨ Taç Çakrası',
+            color: 'var(--accent-1)',
+            colorName: 'Mor',
+            duration: '18:00 dk',
+            title: '🌌 Ruhsal Bağlantı Meditasyonu',
+            description: 'Taç çakra evrensel bilinçle bağlantı noktanızdır. Ruhsal sıkışmışlık hissettiğinde bu çakra kapalıdır. Bu meditasyon, yüksek bilinçle bağlantına geçmeni, iç huzurunu bulmanı ve varoluşsal sorularına cevap almanı sağlar.'
+        },
+        'kendine-guven': {
+            chakra: 'solar',
+            chakraName: '🌀 Solar Pleksus Çakrası',
+            color: 'var(--accent-5)',
+            colorName: 'Sarı',
+            duration: '12:00 dk',
+            title: '🦋 Özgüven Meditasyonu',
+            description: 'Solar pleksus çakrası özgüven ve irade merkezidir. Kendine güvenmediğinde bu çakra zayıflar. Bu meditasyon, içsel gücünü keşfetmene, sınırlayıcı inançları bırakmana ve kendine olan güvenini yeniden inşa etmene yardımcı olur.'
+        }
+    };
+
+    problemTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            problemTags.forEach(t => t.classList.remove('selected'));
+            tag.classList.add('selected');
+            selectedProblem = tag.dataset.problem;
+            problemInput.placeholder = tag.dataset.problem === 'para' 
+                ? 'Para ve bolluk konusunda neler yaşıyorsun? Duygularını, düşüncelerini ve ne istediğini anlat...'
+                : `Bu konuda neler yaşıyorsun? Duygularını anlat...`;
+            checkForm();
+        });
+    });
+
+    problemInput.addEventListener('input', checkForm);
+
+    function checkForm() {
+        submitBtn.disabled = !(selectedProblem && problemInput.value.trim().length > 5);
+    }
+
+    // ─── FORM GÖNDER ───
+    document.getElementById('submitBtn').addEventListener('click', () => {
+        if (!selectedProblem) return;
+        const detail = problemDetails[selectedProblem];
+        if (!detail) return;
+
+        document.getElementById('resultChakraDot').style.background = detail.color;
+        document.getElementById('resultTitle').textContent = detail.title;
+        document.getElementById('resultProblem').textContent = `"${problemInput.value.trim().slice(0, 100)}..."`;
+        document.getElementById('resultChakraName').textContent = detail.chakraName;
+        document.getElementById('resultDescription').textContent = detail.description;
+        document.getElementById('resultDuration').textContent = detail.duration;
+        document.getElementById('resultColor').textContent = detail.colorName;
+        document.getElementById('shareBtn').href = `https://www.instagram.com/ben_nalan_nurr`;
+
+        const resultSection = document.getElementById('resultSection');
+        resultSection.classList.add('visible');
+        resultSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    function shareResult() {
+        if (navigator.share) {
+            navigator.share({
+                title: document.getElementById('resultTitle').textContent,
+                text: `🌙 Nalan Nur'da sorunuma özel meditasyon hazırladım: "${problemInput.value.trim().slice(0, 50)}..."`,
+                url: window.location.href
+            });
+        }
+    }
+</script>
+</body>
+</html>
